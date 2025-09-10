@@ -1,0 +1,23 @@
+{
+  "name": "alcyone",
+  "version": "1.0.0",
+  "description": "Alcyone is the most complete and stable discord bot possible for your server.",
+  "main": "src/main.ts",
+  "scripts": {
+    "dev": "infisical run --env=dev bun run src/main.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HarukaYamamoto0/Alcyone.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HarukaYamamoto0/Alcyone/issues"
+  },
+  "homepage": "https://github.com/HarukaYamamoto0/Alcyone#readme",
+  "dependencies": {
+    "discord.js": "^14.22.1"
+  }
+}
