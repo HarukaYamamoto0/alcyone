@@ -1,8 +1,14 @@
-import {Client, IntentsBitField} from "discord.js";
+import {AlcyoneClient} from "./core/Client";
+import {commandLoader} from "./loaders/commandLoader";
+import {botEventLoader} from "./loaders/botEventLoader";
+import registerSlashCommands from "./loaders/slashCommandRegister";
 
-(async () => {
-    const client = new Client({intents: IntentsBitField.Flags.Guilds})
+const client = new AlcyoneClient()
 
-    await client.login(process.env.BOT_TOKEN)
-    console.log("[INDEX] - index successfully loaded");
-})();
+const commands = await commandLoader()
+client.commands = commands
+await botEventLoader(client)
+await registerSlashCommands(client)
+
+await client.connect()
+console.log("[INDEX] - index successfully loaded");
