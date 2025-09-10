@@ -1,6 +1,6 @@
 import {ChatInputCommandInteraction, EmbedBuilder, version as discordVersion} from 'discord.js';
-import BaseCommand from '../interfaces/BaseCommand';
-import {version as botVersion} from '../../package.json';
+import BaseCommand from '../../interfaces/BaseCommand';
+import {version as botVersion} from '../../../package.json';
 
 class BotInfo extends BaseCommand {
     constructor() {

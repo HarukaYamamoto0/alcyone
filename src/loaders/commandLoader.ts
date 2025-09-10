@@ -1,6 +1,7 @@
 import {Collection} from 'discord.js';
 import {readdirSync} from 'node:fs';
 import BaseCommand from '../interfaces/BaseCommand';
+import {fileURLToPath} from "node:url";
 
 /**
  * Loads and registers command files from a specified directory into a collection.
@@ -12,17 +13,26 @@ async function commandLoader(path: URL | null = null): Promise<Collection<string
     const commands = new Collection<string, BaseCommand>();
     const commandsPath = path ?? new URL("../commands/", import.meta.url);
 
-    const commandFiles = readdirSync(commandsPath)
-        .filter(file => file.endsWith('.ts'));
+    const categoryNames = readdirSync(fileURLToPath(commandsPath));
 
-    for (const file of commandFiles) {
-        const {default: Command} = await import(`${commandsPath.href}/${file}`)
-        const command = new Command() as BaseCommand;
+    for (const category of categoryNames) {
+        const categoryPath = new URL(category + "/", commandsPath);
 
-        if ('execute' in command) {
-            commands.set(command.name, command);
-        } else {
-            console.warn(`[WARNING] The command at ${file} is missing required "data" or "execute" property.`);
+        const commandFiles = readdirSync(fileURLToPath(categoryPath))
+            .filter(file => file.endsWith('.ts') || file.endsWith('.js'));
+
+        for (const file of commandFiles) {
+            const filePath = new URL(file, categoryPath);
+            const {default: Command} = await import(filePath.href)
+
+            const command = new Command() as BaseCommand;
+            command.category = category;
+
+            if ('execute' in command) {
+                commands.set(command.name, command);
+            } else {
+                console.warn(`[WARNING] The command at ${file} is missing required "data" or "execute" property.`);
+            }
         }
     }
 

@@ -1,7 +1,13 @@
-import {REST, Routes} from 'discord.js';
-import {AlcyoneClient} from '../core/Client';
+import {Collection, REST, Routes} from 'discord.js';
+import BaseCommand from "../interfaces/BaseCommand";
 
-async function registerSlashCommands(client: AlcyoneClient): Promise<void> {
+/**
+ * Registers and updates the slash commands for the application using the provided commands collection.
+ *
+ * @param {Collection<string, BaseCommand>} commands - A collection of commands to be registered, where the key is the command name and the value is the command data.
+ * @return {Promise<void>} A promise that resolves once the slash commands have been registered or updated successfully.
+ */
+async function registerSlashCommands(commands: Collection<string, BaseCommand>): Promise<void> {
     try {
         if (!process.env.BOT_TOKEN) {
             console.error('No BOT_TOKEN environment variable found.');
@@ -17,7 +23,7 @@ async function registerSlashCommands(client: AlcyoneClient): Promise<void> {
         }
         await rest.put(
             Routes.applicationCommands(process.env.CLIENT_ID),
-            {body: Array.from(client.commands.values()).map(command => command.toJSON())}
+            {body: Array.from(commands.values()).map(command => command.toJSON())}
         );
 
         console.log('Successfully reloaded application (/) commands.');

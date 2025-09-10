@@ -15,7 +15,7 @@ async function botEventLoader(client: Client, path: URL | null = null): Promise<
         .filter(file => file.endsWith('.ts'));
 
     for (const file of eventFiles) {
-        const {default: Event} = await import(`${eventsPath.href}/${file}`)
+        const {default: Event} = await import(new URL(file, eventsPath).href);
         const event = new Event();
 
         if ('execute' in event) {

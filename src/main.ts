@@ -8,7 +8,7 @@ const client = new AlcyoneClient()
 const commands = await commandLoader()
 client.commands = commands
 await botEventLoader(client)
-await registerSlashCommands(client)
+await registerSlashCommands(commands)
 
 await client.connect()
 console.log("[INDEX] - index successfully loaded");

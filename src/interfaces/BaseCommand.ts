@@ -12,8 +12,11 @@ import {ChatInputCommandInteraction, SlashCommandBuilder} from 'discord.js';
  * This class cannot be instantiated directly and is intended to be extended by command-specific classes.
  */
 abstract class BaseCommand extends SlashCommandBuilder {
+    public category: string;
+
     protected constructor() {
         super();
+        this.category = 'Uncategorized';
     }
 
     /**
