@@ -6,18 +6,16 @@
   "scripts": {
     "dev": "infisical run --env=dev bun run src/main.ts"
   },
+  "dependencies": {
+    "discord.js": "^14.22.1"
+  },
+  "devDependencies": {},
+  "author": "HarukaYamamoto0 <harukayamamotodev@gmail.com>",
+  "license": "Apache-2.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/HarukaYamamoto0/alcyone.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/HarukaYamamoto0/alcyone/issues"
-  },
-  "homepage": "https://github.com/HarukaYamamoto0/alcyone#readme",
-  "dependencies": {
-    "discord.js": "^14.22.1"
-  }
+  "bugs": "https://github.com/HarukaYamamoto0/alcyone/issues",
+  "homepage": "https://github.com/HarukaYamamoto0/alcyone#readme"
 }
