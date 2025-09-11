@@ -4,3 +4,4 @@ node_modules
 .idea
 .idea/dictionaries/*
 !.idea/dictionaries/project.xml
+.eslintcache

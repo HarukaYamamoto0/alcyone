@@ -1,34 +1,28 @@
-import {Client} from 'discord.js';
-import {readdirSync} from 'node:fs';
+import { readdirSync } from 'node:fs';
+import type { BaseBotEvent } from '../interfaces/BaseBotEvent';
+import type { AlcyoneClient } from '../core/Client';
 
 /**
  * Loads and registers event files from a specified directory into the Discord client.
  *
- * @param {Client} client - The Discord.js client instance to register events
- * @param {URL | null} path - The directory path where event files are located. If null, defaults to "../events/" relative to the current module.
- * @return {Promise<string[]>} A promise that when resolved returns the names of the events that were loaded
+ * @param client - The Discord.js client instance
+ * @param path - The directory path where event files are located
  */
-async function botEventLoader(client: Client, path: URL | null = null): Promise<string[]> {
-    const eventsPath = path ?? new URL("../events/", import.meta.url);
+export async function botEventLoader(client: AlcyoneClient, path: URL | null = null): Promise<string[]> {
+  const eventsPath = path ?? new URL('../events/', import.meta.url);
 
-    const eventFiles = readdirSync(eventsPath)
-        .filter(file => file.endsWith('.ts'));
+  const eventFiles = readdirSync(eventsPath).filter((file) => file.endsWith('.ts'));
 
-    for (const file of eventFiles) {
-        const {default: Event} = await import(new URL(file, eventsPath).href);
-        const event = new Event();
+  for (const file of eventFiles) {
+    const { default: Event } = await import(new URL(file, eventsPath).href);
+    const event: BaseBotEvent = new Event();
 
-        if ('execute' in event) {
-            if (event.once) {
-                client.once(event.eventType, (...args) => event.execute(client, ...args));
-            } else {
-                client.on(event.eventType, (...args) => event.execute(client, ...args));
-            }
-        } else {
-            console.warn(`[WARNING] The event at ${file} is missing required "execute" property.`);
-        }
+    if (event.once) {
+      client.once(event.eventType, (...args) => event.execute(client, ...args));
+    } else {
+      client.on(event.eventType, (...args) => event.execute(client, ...args));
     }
-    return eventFiles
-}
+  }
 
-export {botEventLoader}
+  return eventFiles;
+}

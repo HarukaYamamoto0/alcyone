@@ -1,22 +1,42 @@
 {
   "name": "alcyone",
   "version": "1.0.0",
-  "description": "alcyone is the most complete and stable discord bot possible for your server.",
-  "main": "src/main.ts",
+  "description": "Alcyone is the most complete and stable Discord bot possible for your server.",
+  "type": "module",
+  "main": "dist/main.js",
   "scripts": {
     "dev": "NODE_ENV=development infisical run --env=dev bun run src/main.ts",
-    "start": "NODE_ENV=production infisical run --env=prod bun run src/main.ts"
+    "start": "NODE_ENV=production infisical run --env=prod bun run dist/main.js",
+    "build": "bunx tsc",
+    "lint": "bunx eslint . --ext .ts --cache --cache-strategy content",
+    "lint:fix": "bunx eslint . --ext .ts --fix --cache --cache-strategy content",
+    "format": "bunx prettier --check . --cache --cache-strategy content",
+    "format:fix": "bunx prettier --write . --cache --cache-strategy content",
+    "test": "bunx vitest run"
   },
   "dependencies": {
     "discord.js": "^14.22.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.1",
+    "@eslint/js": "^9.35.0",
+    "@types/node": "^22.5.4",
+    "eslint": "^9.35.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^16.4.0",
+    "jiti": "^2.5.1",
+    "prettier": "3.6.2",
+    "typescript": "^5.6.3",
+    "typescript-eslint": "^8.43.0"
+  },
   "author": "HarukaYamamoto0 <harukayamamotodev@gmail.com>",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/HarukaYamamoto0/alcyone.git"
   },
-  "bugs": "https://github.com/HarukaYamamoto0/alcyone/issues",
+  "bugs": {
+    "url": "https://github.com/HarukaYamamoto0/alcyone/issues"
+  },
   "homepage": "https://github.com/HarukaYamamoto0/alcyone#readme"
 }

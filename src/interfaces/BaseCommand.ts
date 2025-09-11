@@ -1,4 +1,5 @@
-import {ChatInputCommandInteraction, SlashCommandBuilder} from 'discord.js';
+import type { ChatInputCommandInteraction } from 'discord.js';
+import { SlashCommandBuilder } from 'discord.js';
 
 /**
  * Represents an abstract base class for creating and managing slash commands in a Discord bot.
@@ -7,25 +8,27 @@ import {ChatInputCommandInteraction, SlashCommandBuilder} from 'discord.js';
  * Subclasses must implement the `execute` method to handle the interaction logic for the command.
  *
  * Methods:
- * - execute(interaction): An abstract method that subclasses must implement to define the logic for executing the command.
+ * - execute(interaction): An abstract method that subclasses must implement to define the logic for executing the
+ * command.
  *
  * This class cannot be instantiated directly and is intended to be extended by command-specific classes.
  */
 abstract class BaseCommand extends SlashCommandBuilder {
-    public category: string;
+  public category: string;
 
-    protected constructor() {
-        super();
-        this.category = 'Uncategorized';
-    }
+  protected constructor() {
+    super();
+    this.category = 'Uncategorized';
+  }
 
-    /**
-     * Executes the defined operation based on the provided interaction.
-     *
-     * @param {ChatInputCommandInteraction} interaction - The interaction object containing the command details and user input.
-     * @return {Promise<void>} A promise that resolves when the operation has been successfully executed.
-     */
-    abstract execute(interaction: ChatInputCommandInteraction): Promise<void>;
+  /**
+   * Executes the defined operation based on the provided interaction.
+   *
+   * @param {ChatInputCommandInteraction} interaction - The interaction object containing the command details and user
+   * input.
+   * @return {Promise<void>} A promise that resolves when the operation has been successfully executed.
+   */
+  abstract execute(interaction: ChatInputCommandInteraction): Promise<void>;
 }
 
 export default BaseCommand;
