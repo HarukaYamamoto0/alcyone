@@ -1,9 +1,23 @@
 <component name="ProjectDictionaryState">
   <dictionary name="project">
     <words>
+      <w>animeinfo</w>
+      <w>avgtemp</w>
+      <w>avgvis</w>
       <w>backrefs</w>
       <w>botinfo</w>
+      <w>dewpoint</w>
+      <w>feelslike</w>
+      <w>heatindex</w>
+      <w>hypesquad</w>
+      <w>maxtemp</w>
+      <w>maxwind</w>
       <w>nonoctal</w>
+      <w>precip</w>
+      <w>servericon</w>
+      <w>serverinfo</w>
+      <w>totalprecip</w>
+      <w>totalsnow</w>
     </words>
   </dictionary>
 </component>
