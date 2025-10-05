@@ -3,12 +3,14 @@ import { EmbedBuilder, MessageFlagsBitField, PermissionsBitField } from 'discord
 import moment from 'moment';
 import 'moment/locale/en-gb';
 import BaseCommand from '../../interfaces/BaseCommand';
+import { Constants } from '../../config/constants';
+import { Emojis } from '../../config/emojis';
 
 class ClearMessages extends BaseCommand {
   constructor() {
     super();
     this.setName('clear');
-    this.setDescription('🧹 Deletes a set amount of messages in the current channel.');
+    this.setDescription(`${Emojis.broom} Deletes a set amount of messages in the current channel.`);
     this.addIntegerOption((option) =>
       option.setName('amount').setDescription('Number of messages to delete (1-99)').setRequired(true),
     );
@@ -19,7 +21,7 @@ class ClearMessages extends BaseCommand {
 
     if (!interaction.guild || !interaction.channel || !interaction.inGuild()) {
       await interaction.reply({
-        content: '❌ This command can only be used inside a server channel.',
+        content: `${Emojis.error} This command can only be used inside a server channel.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
       return;
@@ -31,7 +33,7 @@ class ClearMessages extends BaseCommand {
     // Permission checks
     if (!member.permissions.has(PermissionsBitField.Flags.ManageMessages)) {
       await interaction.reply({
-        content: '❌ You need the **Manage Messages** permission to use this command.',
+        content: `${Emojis.error} You need the **Manage Messages** permission to use this command.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
       return;
@@ -39,7 +41,7 @@ class ClearMessages extends BaseCommand {
 
     if (!me.permissions.has(PermissionsBitField.Flags.ManageMessages)) {
       await interaction.reply({
-        content: '❌ I need the **Manage Messages** permission to perform this action.',
+        content: `${Emojis.error} I need the **Manage Messages** permission to perform this action.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
       return;
@@ -47,7 +49,7 @@ class ClearMessages extends BaseCommand {
 
     if (amount < 1 || amount > 99) {
       await interaction.reply({
-        content: '❌ Please provide a number between **1** and **99**.',
+        content: `${Emojis.error} Please provide a number between **1** and **99**.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
       return;
@@ -87,12 +89,12 @@ class ClearMessages extends BaseCommand {
               { name: 'Channel', value: `${channel}`, inline: true },
               { name: 'Messages Deleted', value: `${messages.size}`, inline: true },
               {
-                name: 'Date',
+                name: `${Emojis.date} Date`,
                 value: `${moment.utc(interaction.createdAt).format('DD/MM/YYYY HH:mm:ss')}`,
                 inline: true,
               },
             )
-            .setColor(0xff0000)
+            .setColor(Constants.COLORS.primary)
             .setFooter({
               text: `Bulk Delete • ${interaction.guild.name}`,
               iconURL: interaction.guild.iconURL() ?? undefined,
@@ -104,7 +106,7 @@ class ClearMessages extends BaseCommand {
       }
     } catch (error) {
       await interaction.reply({
-        content: '❌ Messages older than **14 days** cannot be deleted.',
+        content: `${Emojis.error} Messages older than **14 days** cannot be deleted.'`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
       console.log(error);

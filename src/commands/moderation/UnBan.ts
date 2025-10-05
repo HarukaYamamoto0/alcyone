@@ -1,12 +1,14 @@
 import type { ChatInputCommandInteraction } from 'discord.js';
 import { EmbedBuilder, MessageFlagsBitField, PermissionFlagsBits } from 'discord.js';
 import BaseCommand from '../../interfaces/BaseCommand';
+import { Constants } from '../../config/constants';
+import { Emojis } from '../../config/emojis';
 
 class Unban extends BaseCommand {
   constructor() {
     super();
     this.setName('unban');
-    this.setDescription('♻️ Unban a user by ID');
+    this.setDescription(`${Emojis.recycle} Unban a user by ID`);
     this.addStringOption((option) =>
       option.setName('user_id').setDescription('The ID of the user to unban').setRequired(true),
     );
@@ -28,7 +30,7 @@ class Unban extends BaseCommand {
 
     if (!guild) {
       await interaction.reply({
-        content: '❌ This command must be used in a server.',
+        content: `${Emojis.error}This command must be used in a server.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
       return;
@@ -37,7 +39,7 @@ class Unban extends BaseCommand {
     const me = guild.members.me;
     if (!me?.permissions.has(PermissionFlagsBits.BanMembers)) {
       await interaction.reply({
-        content: '❌ I don’t have permission to unban members.',
+        content: `${Emojis.error}I don’t have permission to unban members.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
       return;
@@ -49,7 +51,7 @@ class Unban extends BaseCommand {
 
       if (!bannedUser) {
         await interaction.reply({
-          content: '❌ No user with that ID is banned.',
+          content: `${Emojis.error}No user with that ID is banned.`,
           flags: MessageFlagsBitField.Flags.Ephemeral,
         });
         return;
@@ -60,7 +62,8 @@ class Unban extends BaseCommand {
 
       const embed = new EmbedBuilder()
         .setTitle('♻️ User Unbanned')
-        .setColor(0x00ff00)
+        .setColor(Constants.COLORS.primary)
+        .setColor(Constants.COLORS.primary)
         .addFields(
           { name: 'Unbanned User', value: `\`${user.tag}\``, inline: true },
           { name: 'User ID', value: `\`${user.id}\``, inline: true },

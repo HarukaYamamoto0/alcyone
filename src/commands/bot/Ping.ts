@@ -1,11 +1,23 @@
 import type { ChatInputCommandInteraction } from 'discord.js';
 import { EmbedBuilder } from 'discord.js';
 import BaseCommand from '../../interfaces/BaseCommand';
+import { Emojis } from '../../config/emojis';
+import { Constants } from '../../config/constants';
 
 class Ping extends BaseCommand {
   constructor() {
     super();
-    this.setName('ping').setDescription('🏓 Shows bot and server latency with a dash of style');
+    this.setName('ping').setDescription(`${Emojis.ping_pong} Shows bot and server latency with a dash of style`);
+    // TODO: Add a cooldown to this command and automatic category
+    // this.setDMPermission(false);
+    // this.setNSFW(false);
+    // this.setDevOnly(false);
+    // this.setGuildOnly(false);
+    // this.setOwnerOnly(false);
+    // this.setPremiumOnly(false);
+    // this.setRestricted(false);
+    // this.setCategory('Information');
+    // this.setSubcategory('General');
   }
 
   async execute(interaction: ChatInputCommandInteraction): Promise<void> {
@@ -32,14 +44,14 @@ class Ping extends BaseCommand {
       const guildPing = Date.now() - interaction.createdTimestamp;
 
       const pingEmbed = new EmbedBuilder()
-        .setTitle('🏓 Pong! Check out the stats below:')
+        .setTitle(`${Emojis.ping_pong} Pong! Check out the stats below:`)
         .setDescription(
-          `**📡 Client Ping:** \`${clientPing}ms\`\n` +
-            `**🌐 Guild Ping:** \`${guildPing}ms\`\n` +
-            `**🤖 Bot Uptime:** ${uptime}`,
+          `**${Emojis.satellite} Client Ping:** \`${clientPing}ms\`\n` +
+            `**${Emojis.globe} Guild Ping:** \`${guildPing}ms\`\n` +
+            `**${Emojis.robot} Bot Uptime:** ${uptime}`,
         )
-        .setColor(0x00ff00)
-        .setFooter({ text: '⚡ Fast and reliable — just like me!' });
+        .setColor(Constants.COLORS.primary)
+        .setFooter({ text: `${Emojis.flash} Fast and reliable — just like me!` });
 
       await interaction.editReply({ embeds: [pingEmbed] });
     }, 1500); // shorter delay, more responsive

@@ -3,33 +3,14 @@ import { EmbedBuilder } from 'discord.js';
 import moment from 'moment';
 import 'moment/locale/en-gb';
 import BaseCommand from '../../interfaces/BaseCommand';
-
-const badgeMap: Record<string, string> = {
-  Staff: '🛠️',
-  Partner: '🤝',
-  Hypesquad: '🎉',
-  BugHunterLevel1: '🐞',
-  BugHunterLevel2: '🐛',
-  HypeSquadOnlineHouse1: '🦁',
-  HypeSquadOnlineHouse2: '🧠',
-  HypeSquadOnlineHouse3: '⚖️',
-  PremiumEarlySupporter: '💎',
-  VerifiedBot: '🤖',
-  VerifiedDeveloper: '👨‍💻',
-};
-
-const statusMap: Record<string, string> = {
-  online: '🟢 Online',
-  idle: '🌙 Idle',
-  dnd: '⛔ Do Not Disturb',
-  offline: '⚫ Offline',
-};
+import { Constants } from '../../config/constants';
+import { Emojis, statusMap, userBadgesMap } from '../../config/emojis';
 
 class UserInfo extends BaseCommand {
   constructor() {
     super();
     this.setName('userinfo');
-    this.setDescription('👤 Shows detailed information about a user');
+    this.setDescription(`${Emojis.bust_in_silhouette}️ Shows detailed information about a user`);
     this.addUserOption((option) => option.setName('user').setDescription('The user to get information about'));
   }
 
@@ -40,7 +21,7 @@ class UserInfo extends BaseCommand {
     const badges = user.flags
       ? user.flags
           .toArray()
-          .map((flag) => badgeMap[flag] || '')
+          .map((flag) => userBadgesMap[flag] || '')
           .join(' ')
       : '';
 
@@ -49,14 +30,14 @@ class UserInfo extends BaseCommand {
     const embed = new EmbedBuilder()
       .setAuthor({ name: `${user.tag}`, iconURL: user.displayAvatarURL() })
       .setThumbnail(user.displayAvatarURL({ size: 512 }))
-      .setColor(member?.premiumSince ? 0xf47fff : 0xffffff)
+      .setColor(Constants.COLORS.primary)
       .addFields(
-        { name: '🆔 User ID', value: `\`${user.id}\``, inline: true },
-        { name: '🏷️ Nickname', value: member?.nickname || '—', inline: true },
-        { name: '🎭 Badges', value: badges || 'None', inline: true },
-        { name: '📡 Status', value: status, inline: true },
+        { name: `${Emojis.id}️ User ID`, value: `\`${user.id}\``, inline: true },
+        { name: `${Emojis.label}️ Nickname`, value: member?.nickname || '—', inline: true },
+        { name: `${Emojis.performing_arts}️ Badges`, value: badges || 'None', inline: true },
+        { name: `${Emojis.satellite}️ Status`, value: status, inline: true },
         {
-          name: '📅 Account Created',
+          name: `${Emojis.date}️ Account Created`,
           value: `${moment.utc(user.createdAt).format('DD/MM/YYYY')} (${moment(user.createdAt).fromNow()})`,
           inline: true,
         },
@@ -64,14 +45,14 @@ class UserInfo extends BaseCommand {
 
     if (member) {
       embed.addFields({
-        name: '📥 Joined Server',
+        name: `${Emojis.inbox_tray} Joined Server`,
         value: `${moment.utc(member.joinedAt).format('DD/MM/YYYY')} (${moment(member.joinedAt).fromNow()})`,
         inline: true,
       });
 
       if (member.premiumSince) {
         embed.addFields({
-          name: '🚀 Boosting Since',
+          name: `${Emojis.rocket} Boosting Since`,
           value: `${moment.utc(member.premiumSince).format('DD/MM/YYYY')} (${moment(member.premiumSince).fromNow()})`,
           inline: true,
         });

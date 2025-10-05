@@ -1,12 +1,14 @@
 import type { ChatInputCommandInteraction } from 'discord.js';
 import { EmbedBuilder, MessageFlagsBitField, PermissionFlagsBits } from 'discord.js';
 import BaseCommand from '../../interfaces/BaseCommand';
+import { Constants } from '../../config/constants';
+import { Emojis } from '../../config/emojis';
 
 class KickMember extends BaseCommand {
   constructor() {
     super();
     this.setName('kick');
-    this.setDescription('👢 Kick a user from the server');
+    this.setDescription(`${Emojis.boot} Kick a user from the server`);
     this.addUserOption((option) => option.setName('user').setDescription('The user to kick').setRequired(true));
     this.addStringOption((option) =>
       option
@@ -22,7 +24,7 @@ class KickMember extends BaseCommand {
     const guild = interaction.guild;
     if (!guild) {
       await interaction.reply({
-        content: '❌ This command must be used in a server.',
+        content: `${Emojis.error}This command must be used in a server.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
       return;
@@ -35,7 +37,7 @@ class KickMember extends BaseCommand {
     const me = guild.members.me;
     if (!me?.permissions.has(PermissionFlagsBits.KickMembers)) {
       await interaction.reply({
-        content: '❌ I don’t have permission to kick members.',
+        content: `${Emojis.error}I don’t have permission to kick members.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
       return;
@@ -44,7 +46,7 @@ class KickMember extends BaseCommand {
     const memberTarget = await guild.members.fetch(targetUser.id);
     if (!memberTarget) {
       await interaction.reply({
-        content: '❌ Could not find that user in this server.',
+        content: `${Emojis.error}Could not find that user in this server.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
       return;
@@ -53,14 +55,14 @@ class KickMember extends BaseCommand {
     // Safety checks
     if (memberTarget.id === authorMember.id) {
       await interaction.reply({
-        content: '❌ You can’t kick yourself.',
+        content: `${Emojis.error}You can’t kick yourself.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
       return;
     }
     if (memberTarget.id === me.id) {
       await interaction.reply({
-        content: '❌ You can’t kick me.',
+        content: `${Emojis.error}You can’t kick me.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
       return;
@@ -68,7 +70,7 @@ class KickMember extends BaseCommand {
     if (interaction.member && 'roles' in interaction.member) {
       if (authorMember.roles.highest.position <= memberTarget.roles.highest.position) {
         await interaction.reply({
-          content: '❌ You cannot kick someone with equal or higher role than yours.',
+          content: `${Emojis.error}You cannot kick someone with equal or higher role than yours.`,
           flags: MessageFlagsBitField.Flags.Ephemeral,
         });
         return;
@@ -76,7 +78,7 @@ class KickMember extends BaseCommand {
     }
     if (me.roles.highest.position <= memberTarget.roles.highest.position) {
       await interaction.reply({
-        content: '❌ I cannot kick someone with equal or higher role than mine.',
+        content: `${Emojis.error}I cannot kick someone with equal or higher role than mine.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
       return;
@@ -87,8 +89,8 @@ class KickMember extends BaseCommand {
       await memberTarget.kick(reason);
 
       const embed = new EmbedBuilder()
-        .setTitle('👢 User Kicked')
-        .setColor(0xff0000)
+        .setTitle(`${Emojis.boot} User Kicked`)
+        .setColor(Constants.COLORS.primary)
         .addFields(
           { name: 'Kicked User', value: `\`${memberTarget.user.tag}\``, inline: true },
           { name: 'User ID', value: `\`${memberTarget.id}\``, inline: true },

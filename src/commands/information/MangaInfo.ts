@@ -2,12 +2,14 @@ import type { ChatInputCommandInteraction } from 'discord.js';
 import { EmbedBuilder } from 'discord.js';
 import axios from 'axios';
 import BaseCommand from '../../interfaces/BaseCommand';
+import { Constants } from '../../config/constants';
+import { Emojis } from '../../config/emojis';
 
 class MangaInfo extends BaseCommand {
   constructor() {
     super();
     this.setName('mangainfo');
-    this.setDescription('📖 Shows detailed information about a manga by name');
+    this.setDescription(`${Emojis.book} Shows detailed information about a manga by name`);
     this.addStringOption((option) =>
       option.setName('manga').setDescription('Name of the manga to search').setRequired(true),
     );
@@ -27,7 +29,7 @@ class MangaInfo extends BaseCommand {
       const data = response.data.data;
       if (!data || data.length === 0) {
         await interaction.editReply({
-          content: `❌ No manga found with the name **${mangaName}**.`,
+          content: `${Emojis.error} No manga found with the name **${mangaName}**.`,
         });
         return;
       }
@@ -35,15 +37,19 @@ class MangaInfo extends BaseCommand {
       const manga = data[0].attributes;
 
       const embed = new EmbedBuilder()
-        .setTitle(`📖 Manga Info: ${manga.titles?.en || manga.titles?.en_jp || manga.slug}`)
+        .setTitle(`${Emojis.book} Manga Info: ${manga.titles?.en || manga.titles?.en_jp || manga.slug}`)
         .setDescription(manga.synopsis ? manga.synopsis.slice(0, 1000) : 'No synopsis available.')
-        .setColor(0x9b59b6)
+        .setColor(Constants.COLORS.primary)
         .setThumbnail(manga.posterImage?.original || null)
         .addFields(
-          { name: '⭐ Rating', value: manga.averageRating ? `${manga.averageRating}%` : 'N/A', inline: true },
-          { name: '📚 Type', value: manga.subtype || 'Unknown', inline: true },
-          { name: '📖 Chapters', value: manga.chapterCount?.toString() || '???', inline: true },
-          { name: '📦 Volumes', value: manga.volumeCount?.toString() || '???', inline: true },
+          {
+            name: `${Emojis.star} Rating`,
+            value: manga.averageRating ? `${manga.averageRating}%` : 'N/A',
+            inline: true,
+          },
+          { name: `${Emojis.books} Type`, value: manga.subtype || 'Unknown', inline: true },
+          { name: `${Emojis.book} Chapters`, value: manga.chapterCount?.toString() || '???', inline: true },
+          { name: `${Emojis.package} Volumes`, value: manga.volumeCount?.toString() || '???', inline: true },
         )
         .setImage(manga.coverImage?.large || null)
         .setFooter({
@@ -56,7 +62,7 @@ class MangaInfo extends BaseCommand {
     } catch (err) {
       console.error(err);
       await interaction.editReply({
-        content: `❌ An error occurred while searching for **${mangaName}**.`,
+        content: `${Emojis.error} An error occurred while searching for **${mangaName}**.`,
       });
     }
   }

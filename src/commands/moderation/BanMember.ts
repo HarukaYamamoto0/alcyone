@@ -1,12 +1,14 @@
 import type { ChatInputCommandInteraction } from 'discord.js';
 import { EmbedBuilder, MessageFlagsBitField, PermissionFlagsBits } from 'discord.js';
 import BaseCommand from '../../interfaces/BaseCommand';
+import { Constants } from '../../config/constants';
+import { Emojis } from '../../config/emojis';
 
 class Ban extends BaseCommand {
   constructor() {
     super();
     this.setName('ban');
-    this.setDescription('🔨 Ban a user from the server');
+    this.setDescription(`${Emojis.hammer} Ban a user from the server`);
     this.addUserOption((option) => option.setName('user').setDescription('The user to ban').setRequired(true));
     this.addStringOption((option) =>
       option
@@ -27,7 +29,7 @@ class Ban extends BaseCommand {
 
     if (!guild) {
       await interaction.reply({
-        content: '❌ This command must be used in a server.',
+        content: `${Emojis.error} This command must be used in a server.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
       return;
@@ -37,7 +39,7 @@ class Ban extends BaseCommand {
     const me = guild.members.me;
     if (!me?.permissions.has(PermissionFlagsBits.BanMembers)) {
       await interaction.reply({
-        content: '❌ I don’t have permission to ban members.',
+        content: `${Emojis.error} I don’t have permission to ban members.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
       return;
@@ -47,7 +49,7 @@ class Ban extends BaseCommand {
     const bans = await guild.bans.fetch();
     if (bans.has(targetUser.id)) {
       await interaction.reply({
-        content: '❌ That user is already banned.',
+        content: `${Emojis.error} That user is already banned.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
       return;
@@ -56,7 +58,7 @@ class Ban extends BaseCommand {
     // Prevent banning self or bot
     if (targetUser.id === author.id) {
       await interaction.reply({
-        content: '❌ You can’t ban yourself.',
+        content: `${Emojis.error} You can’t ban yourself.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
       return;
@@ -64,7 +66,7 @@ class Ban extends BaseCommand {
 
     if (targetUser.id === me.id) {
       await interaction.reply({
-        content: '❌ You can’t ban me.',
+        content: `${Emojis.error} You can’t ban me.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
       return;
@@ -75,8 +77,8 @@ class Ban extends BaseCommand {
       await guild.members.ban(targetUser, { reason });
 
       const embed = new EmbedBuilder()
-        .setTitle('🛡️ User Banned')
-        .setColor(0xff0000)
+        .setTitle(`${Emojis.shield}  User Banned`)
+        .setColor(Constants.COLORS.primary)
         .addFields(
           { name: 'Banned User', value: `\`${targetUser.tag}\``, inline: true },
           { name: 'User ID', value: `\`${targetUser.id}\``, inline: true },
@@ -92,7 +94,7 @@ class Ban extends BaseCommand {
     } catch (err) {
       console.error(err);
       await interaction.reply({
-        content: `❌ An error occurred while trying to ban **${targetUser.tag}**.`,
+        content: `${Emojis.error} An error occurred while trying to ban **${targetUser.tag}**.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
     }

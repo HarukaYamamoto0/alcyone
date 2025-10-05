@@ -4,7 +4,6 @@ import registerSlashCommands from './loaders/slashCommandRegister';
 import commands from './commands/commands.generated';
 
 const client = new AlcyoneClient();
-
 await botEventLoader(client);
 await registerSlashCommands(commands);
 

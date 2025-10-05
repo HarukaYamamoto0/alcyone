@@ -1,6 +1,7 @@
 import type { ClientOptions } from 'discord.js';
-import { Client, Collection, IntentsBitField } from 'discord.js';
+import { Client, Collection } from 'discord.js';
 import type BaseCommand from '../interfaces/BaseCommand';
+import { Constants } from '../config/constants';
 
 /**
  * Represents a specialized extension of the Client class, designed for handling commands and bot functionality.
@@ -22,7 +23,7 @@ class AlcyoneClient extends Client {
    * @param {ClientOptions} [options={intents: IntentsBitField.Flags.Guilds}] - The options to configure the client,
    * defaulting to guild intents.
    */
-  constructor(options: ClientOptions = { intents: IntentsBitField.Flags.Guilds }) {
+  constructor(options: ClientOptions = { intents: Constants.INTENTS }) {
     super(options);
     this.commands = new Collection();
   }

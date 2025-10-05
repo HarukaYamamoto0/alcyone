@@ -1,12 +1,14 @@
-import type { ChatInputCommandInteraction } from 'discord.js';
+import type { ChatInputCommandInteraction, EmojiIdentifierResolvable } from 'discord.js';
 import { EmbedBuilder, MessageFlagsBitField } from 'discord.js';
 import BaseCommand from '../../interfaces/BaseCommand';
+import { Constants } from '../../config/constants';
+import { Emojis } from '../../config/emojis';
 
 class Suggest extends BaseCommand {
   constructor() {
     super();
     this.setName('suggest');
-    this.setDescription('💡 Submit a suggestion to the server');
+    this.setDescription(`${Emojis.bulb} Submit a suggestion to the server`);
     this.addStringOption((option) =>
       option
         .setName('message')
@@ -22,7 +24,7 @@ class Suggest extends BaseCommand {
 
     if (!serverId || !suggestChannelId) {
       await interaction.reply({
-        content: '❌ | No suggestion channel has been configured in the environment.',
+        content: `${Emojis.error} | No suggestion channel has been configured in the environment.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
       return;
@@ -32,7 +34,7 @@ class Suggest extends BaseCommand {
 
     if (!guild) {
       await interaction.reply({
-        content: ":x: | I couldn't find the server. Please check the server ID in the environment variables.",
+        content: `${Emojis.error} | I couldn't find the server. Please check the server ID in the environment variables.`,
       });
       return;
     }
@@ -41,7 +43,7 @@ class Suggest extends BaseCommand {
 
     if (!channel || !channel.isTextBased()) {
       await interaction.reply({
-        content: '❌ | The configured suggestion channel does not exist or is not a text channel.',
+        content: `${Emojis.error} | The configured suggestion channel does not exist or is not a text channel.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
       return;
@@ -50,8 +52,8 @@ class Suggest extends BaseCommand {
     const content = interaction.options.getString('message', true);
 
     const embed = new EmbedBuilder()
-      .setTitle('💡 New Suggestion')
-      .setColor('Random')
+      .setTitle(`${Emojis.bulb} New Suggestion`)
+      .setColor(Constants.COLORS.primary)
       .setThumbnail(interaction.user.displayAvatarURL())
       .addFields(
         { name: '👤 Author', value: `${interaction.user}`, inline: true },
@@ -63,14 +65,15 @@ class Suggest extends BaseCommand {
     const msg = await channel.send({ embeds: [embed] });
 
     try {
-      await msg.react('👍');
-      await msg.react('👎');
-    } catch {
+      await msg.react(Emojis.thumbsup as EmojiIdentifierResolvable);
+      await msg.react(Emojis.thumbsdown as EmojiIdentifierResolvable);
+    } catch (e) {
+      console.log(e);
       // TODO: bot might not have Add Reactions permission
     }
 
     await interaction.reply({
-      content: `✅ | ${interaction.user}, your suggestion has been successfully submitted!`,
+      content: `${Emojis.success} | ${interaction.user}, your suggestion has been successfully submitted!`,
       flags: MessageFlagsBitField.Flags.Ephemeral,
     });
   }

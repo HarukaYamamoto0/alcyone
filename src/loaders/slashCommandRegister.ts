@@ -1,5 +1,6 @@
 import { REST, Routes } from 'discord.js';
 import type BaseCommand from '../interfaces/BaseCommand';
+import { Env } from '../config/env';
 
 /**
  * Registers and updates the slash commands for the application using the provided commands array.
@@ -9,7 +10,7 @@ import type BaseCommand from '../interfaces/BaseCommand';
  */
 async function registerSlashCommands(commands: BaseCommand[]): Promise<void> {
   try {
-    const { BOT_TOKEN, CLIENT_ID } = process.env;
+    const { BOT_TOKEN, CLIENT_ID } = Env;
 
     if (!BOT_TOKEN) {
       console.error('❌ No BOT_TOKEN environment variable found.');

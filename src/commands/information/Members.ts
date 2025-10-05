@@ -1,19 +1,21 @@
 import type { ChatInputCommandInteraction } from 'discord.js';
 import { EmbedBuilder, MessageFlagsBitField } from 'discord.js';
 import BaseCommand from '../../interfaces/BaseCommand';
+import { Constants } from '../../config/constants';
+import { Emojis } from '../../config/emojis';
 
 class Members extends BaseCommand {
   constructor() {
     super();
     this.setName('members');
-    this.setDescription('👥 Shows the number of human and bot members on the server');
+    this.setDescription(`${Emojis.busts_in_silhouette} Shows the number of human and bot members on the server`);
   }
 
   async execute(interaction: ChatInputCommandInteraction): Promise<void> {
     const guild = interaction.guild;
     if (!guild) {
       await interaction.reply({
-        content: '❌ This command can only be used on servers.',
+        content: `${Emojis.error} This command can only be used on servers.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
       return;
@@ -32,7 +34,7 @@ class Members extends BaseCommand {
         text: `Requested by ${interaction.user.tag}`,
         iconURL: interaction.user.displayAvatarURL(),
       })
-      .setColor(0x800080);
+      .setColor(Constants.COLORS.primary);
 
     await interaction.reply({ embeds: [embed] });
   }

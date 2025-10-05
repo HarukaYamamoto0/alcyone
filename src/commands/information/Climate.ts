@@ -3,12 +3,15 @@ import { EmbedBuilder, MessageFlagsBitField } from 'discord.js';
 import BaseCommand from '../../interfaces/BaseCommand';
 import type { WeatherAPIResponse } from '../../interfaces/WeatherAPIResponse';
 import axios from 'axios';
+import { API } from '../../config/api';
+import { Emojis } from '../../config/emojis';
+import { Constants } from '../../config/constants';
 
 class Climate extends BaseCommand {
   constructor() {
     super();
     this.setName('climate');
-    this.setDescription('🌤️ Shows the current climate and 3-day forecast of a location');
+    this.setDescription(`${Emojis.white_sun_small_cloud} Shows the current climate and 3-day forecast of a location`);
     this.addStringOption((option) =>
       option.setName('local').setDescription('City or location to search for the weather').setRequired(true),
     );
@@ -16,13 +19,12 @@ class Climate extends BaseCommand {
 
   async execute(interaction: ChatInputCommandInteraction): Promise<void> {
     const location = interaction.options.getString('local', true);
-    const apiKey = process.env.WEATHER_API_KEY;
 
     try {
       // TODO: Cache the API response
-      const response = await axios.get<WeatherAPIResponse>(`https://api.weatherapi.com/v1/forecast.json`, {
+      const response = await axios.get<WeatherAPIResponse>(API.WEATHER.BASE_URL, {
         params: {
-          key: apiKey,
+          key: API.WEATHER.KEY,
           q: location,
           lang: 'pt',
           days: 3,
@@ -38,7 +40,7 @@ class Climate extends BaseCommand {
 
       // Embed principal
       const embed = new EmbedBuilder()
-        .setTitle(`🌤️ Weather in ${locationData.name}, ${locationData.region}`)
+        .setTitle(`${Emojis.white_sun_small_cloud} Weather in ${locationData.name}, ${locationData.region}`)
         .setDescription(`**Current condition:** ${current.condition.text}`)
         .addFields(
           { name: 'Temperature', value: `${current.temp_c}°C`, inline: true },
@@ -48,7 +50,7 @@ class Climate extends BaseCommand {
           { name: 'Last Update', value: current.last_updated, inline: true },
         )
         .setThumbnail(`https:${current.condition.icon}`)
-        .setColor(0x1e90ff)
+        .setColor(Constants.COLORS.primary)
         .setFooter({
           text: `Requested by ${interaction.user.tag}`,
           iconURL: interaction.user.displayAvatarURL(),
@@ -57,7 +59,7 @@ class Climate extends BaseCommand {
 
       forecastDays.forEach((day) => {
         embed.addFields({
-          name: `📅 ${day.date}`,
+          name: `${Emojis.date} ${day.date}`,
           value: `🌡️ ${day.day.avgtemp_c}°C | Condition: ${day.day.condition.text}`,
           inline: true,
         });
@@ -67,7 +69,7 @@ class Climate extends BaseCommand {
     } catch (err) {
       console.error(err);
       await interaction.reply({
-        content: '❌ This city could not be found or an API error occurred.',
+        content: `${Emojis.error} This city could not be found or an API error occurred.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
     }

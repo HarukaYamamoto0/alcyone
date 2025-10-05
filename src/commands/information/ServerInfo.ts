@@ -3,12 +3,14 @@ import { ChannelType, EmbedBuilder, MessageFlagsBitField } from 'discord.js';
 import moment from 'moment';
 import 'moment/locale/en-gb';
 import BaseCommand from '../../interfaces/BaseCommand';
+import { Constants } from '../../config/constants';
+import { Emojis } from '../../config/emojis';
 
 class ServerInfo extends BaseCommand {
   constructor() {
     super();
     this.setName('serverinfo');
-    this.setDescription('📊 Shows detailed information about this server');
+    this.setDescription(`${Emojis.statics} Shows detailed information about this server`);
     this.addStringOption((option) =>
       option.setName('id').setDescription('Optional server ID to fetch').setRequired(false),
     );
@@ -24,7 +26,7 @@ class ServerInfo extends BaseCommand {
 
     if (!guild) {
       await interaction.reply({
-        content: '❌ Could not find the specified server or you are not in it.',
+        content: `${Emojis.error} Could not find the specified server or you are not in it.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
       return;
@@ -45,20 +47,20 @@ class ServerInfo extends BaseCommand {
       .setAuthor({ name: `Server Info - ${guild.name}`, iconURL: guild.iconURL() ?? undefined })
       .setThumbnail(guild.iconURL())
       .addFields(
-        { name: '🖥️ Server', value: `**${guild.name}**\nID: \`${guild.id}\``, inline: true },
-        { name: '👑 Owner', value: `**${owner.user.tag}**\nID: \`${owner.id}\``, inline: true },
+        { name: `${Emojis.desktop} Server`, value: `**${guild.name}**\nID: \`${guild.id}\``, inline: true },
+        { name: `${Emojis.crown} Owner`, value: `**${owner.user.tag}**\nID: \`${owner.id}\``, inline: true },
         {
-          name: '📅 Created On',
+          name: `${Emojis.date} Created On`,
           value: `${moment.utc(guild.createdAt).format('DD/MM/YYYY')} (${moment(guild.createdAt).fromNow()})`,
           inline: true,
         },
         {
-          name: `👥 Members (${guild.memberCount})`,
+          name: `${Emojis.busts_in_silhouette} Members (${guild.memberCount})`,
           value: `Humans: **${humans}**\nBots: **${bots}**`,
           inline: true,
         },
         {
-          name: `📚 Channels (${guild.channels.cache.size})`,
+          name: `${Emojis.books} Channels (${guild.channels.cache.size})`,
           value: `Text: **${textChannels}**\nVoice: **${voiceChannels}**\nCategories: **${categories}**`,
           inline: true,
         },
@@ -68,7 +70,7 @@ class ServerInfo extends BaseCommand {
         iconURL: interaction.user.displayAvatarURL(),
       })
       .setTimestamp()
-      .setColor(0xf3f3f3);
+      .setColor(Constants.COLORS.primary);
 
     await interaction.reply({ embeds: [embed] });
   }

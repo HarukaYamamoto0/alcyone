@@ -6,7 +6,7 @@
   "main": "dist/main.js",
   "scripts": {
     "dev": "NODE_ENV=development infisical run --env=dev bun run src/main.ts",
-    "start": "NODE_ENV=production infisical run --env=prod bun run dist/main.js",
+    "start": "NODE_ENV=production infisical run --env=prod bun run src/main.ts",
     "build": "bunx tsc",
     "lint": "bunx eslint . --ext .ts --cache --cache-strategy content",
     "lint:fix": "bunx eslint . --ext .ts --fix --cache --cache-strategy content",
@@ -17,7 +17,8 @@
   "dependencies": {
     "axios": "^1.11.0",
     "discord.js": "^14.22.1",
-    "moment": "^2.30.1"
+    "moment": "^2.30.1",
+    "zod": "^4.1.11"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
