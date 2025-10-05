@@ -38,5 +38,4 @@ class Members extends BaseCommand {
   }
 }
 
-// noinspection JSUnusedGlobalSymbols
 export default Members;

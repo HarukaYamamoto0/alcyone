@@ -76,5 +76,4 @@ class Suggest extends BaseCommand {
   }
 }
 
-// noinspection JSUnusedGlobalSymbols
 export default Suggest;

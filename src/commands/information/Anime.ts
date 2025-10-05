@@ -59,5 +59,4 @@ class AnimeInfo extends BaseCommand {
   }
 }
 
-// noinspection JSUnusedGlobalSymbols
 export default AnimeInfo;

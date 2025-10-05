@@ -24,5 +24,4 @@ class Invite extends BaseCommand {
   }
 }
 
-// noinspection JSUnusedGlobalSymbols
 export default Invite;

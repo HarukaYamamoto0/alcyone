@@ -49,5 +49,4 @@ class ServerIcon extends BaseCommand {
   }
 }
 
-// noinspection JSUnusedGlobalSymbols
 export default ServerIcon;

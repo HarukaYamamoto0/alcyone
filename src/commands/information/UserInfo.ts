@@ -88,5 +88,4 @@ class UserInfo extends BaseCommand {
   }
 }
 
-// noinspection JSUnusedGlobalSymbols
 export default UserInfo;

@@ -83,5 +83,4 @@ class Unban extends BaseCommand {
   }
 }
 
-// noinspection JSUnusedGlobalSymbols
 export default Unban;

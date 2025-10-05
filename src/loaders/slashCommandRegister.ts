@@ -1,35 +1,37 @@
-import type { Collection } from 'discord.js';
 import { REST, Routes } from 'discord.js';
 import type BaseCommand from '../interfaces/BaseCommand';
 
 /**
- * Registers and updates the slash commands for the application using the provided commands collection.
+ * Registers and updates the slash commands for the application using the provided commands array.
  *
- * @param {Collection<string, BaseCommand>} commands - A collection of commands to be registered, where the key is the
- * command name and the value is the command data.
+ * @param {BaseCommand[]} commands - An array of command instances to be registered.
  * @return {Promise<void>} A promise that resolves once the slash commands have been registered or updated successfully.
  */
-async function registerSlashCommands(commands: Collection<string, BaseCommand>): Promise<void> {
+async function registerSlashCommands(commands: BaseCommand[]): Promise<void> {
   try {
-    if (!process.env.BOT_TOKEN) {
-      console.error('No BOT_TOKEN environment variable found.');
+    const { BOT_TOKEN, CLIENT_ID } = process.env;
+
+    if (!BOT_TOKEN) {
+      console.error('❌ No BOT_TOKEN environment variable found.');
       return;
     }
-    const rest = new REST().setToken(process.env.BOT_TOKEN);
 
-    console.log('Started refreshing application (/) commands.');
-
-    if (!process.env.CLIENT_ID) {
-      console.error('No CLIENT_ID environment variable found.');
+    if (!CLIENT_ID) {
+      console.error('❌ No CLIENT_ID environment variable found.');
       return;
     }
-    await rest.put(Routes.applicationCommands(process.env.CLIENT_ID), {
-      body: Array.from(commands.values()).map((command) => command.toJSON()),
+
+    const rest = new REST().setToken(BOT_TOKEN);
+
+    console.log('🔄 Started refreshing application (/) commands...');
+
+    await rest.put(Routes.applicationCommands(CLIENT_ID), {
+      body: commands.map((command) => command.toJSON()),
     });
 
-    console.log('Successfully reloaded application (/) commands.');
+    console.log(`✅ Successfully reloaded ${commands.length} application (/) commands.`);
   } catch (error) {
-    console.error('Error refreshing application (/) commands:');
+    console.error('❌ Error refreshing application (/) commands:');
     console.error(error);
   }
 }

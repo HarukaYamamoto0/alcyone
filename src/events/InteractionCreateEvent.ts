@@ -1,38 +1,45 @@
 import type { Interaction } from 'discord.js';
-import { Events, MessageFlagsBitField } from 'discord.js';
+import { Events, MessageFlags } from 'discord.js';
 import type { BaseBotEvent } from '../interfaces/BaseBotEvent';
-import type { AlcyoneClient } from '../core/Client';
+import commands from '../commands/commands.generated';
+
+const commandMap = new Map(commands.map((cmd) => [cmd.name, cmd]));
 
 class InteractionCreateEvent implements BaseBotEvent<'interactionCreate'> {
   public eventType = Events.InteractionCreate as const;
   public once = false;
 
-  async execute(alcyoneClient: AlcyoneClient, interaction: Interaction): Promise<void> {
+  async execute(_: unknown, interaction: Interaction): Promise<void> {
     if (!interaction.isChatInputCommand()) return;
 
-    const command = alcyoneClient.commands.get(interaction.commandName);
+    const command = commandMap.get(interaction.commandName);
 
     if (!command) {
-      console.error(`No command matching ${interaction.commandName} was found.`);
+      console.warn(`[InteractionCreateEvent] - Command "${interaction.commandName}" not found.`);
       return;
     }
 
     try {
       await command.execute(interaction);
     } catch (error) {
-      console.error(`Error executing ${interaction.commandName}`);
-      console.error(error);
+      console.error(`[CommandError] ${interaction.commandName}`, error);
 
-      if (interaction.replied || interaction.deferred) {
-        await interaction.followUp({
-          content: 'There was an error while executing this command!',
-          flags: MessageFlagsBitField.Flags.Ephemeral,
-        });
-      } else {
-        await interaction.reply({
-          content: 'There was an error while executing this command!',
-          flags: MessageFlagsBitField.Flags.Ephemeral,
-        });
+      const errorPayload = {
+        content: '⚠️ There was an unexpected error while executing this command.',
+        flags: MessageFlags.Ephemeral,
+      } as const;
+
+      try {
+        if (interaction.replied || interaction.deferred) {
+          await interaction.followUp(errorPayload);
+        } else {
+          await interaction.reply(errorPayload);
+        }
+      } catch (sendError) {
+        console.error(
+          `[InteractionCreateEvent] - Failed to send error response for ${interaction.commandName}`,
+          sendError,
+        );
       }
     }
   }

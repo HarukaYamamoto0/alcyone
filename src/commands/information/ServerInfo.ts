@@ -74,5 +74,4 @@ class ServerInfo extends BaseCommand {
   }
 }
 
-// noinspection JSUnusedGlobalSymbols
 export default ServerInfo;

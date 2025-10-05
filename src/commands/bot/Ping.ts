@@ -46,5 +46,4 @@ class Ping extends BaseCommand {
   }
 }
 
-// noinspection JSUnusedGlobalSymbols
 export default Ping;

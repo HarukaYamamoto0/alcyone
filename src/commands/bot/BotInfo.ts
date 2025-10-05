@@ -51,6 +51,4 @@ class BotInfo extends BaseCommand {
   }
 }
 
-// TODO: recreate the way commands are loaded
-// noinspection JSUnusedGlobalSymbols
 export default BotInfo;

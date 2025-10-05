@@ -112,5 +112,4 @@ class ClearMessages extends BaseCommand {
   }
 }
 
-// noinspection JSUnusedGlobalSymbols
 export default ClearMessages;

@@ -121,5 +121,4 @@ class KickMember extends BaseCommand {
   }
 }
 
-// noinspection JSUnusedGlobalSymbols
 export default KickMember;

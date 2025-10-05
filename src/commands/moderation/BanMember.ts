@@ -99,5 +99,4 @@ class Ban extends BaseCommand {
   }
 }
 
-// noinspection JSUnusedGlobalSymbols
 export default Ban;

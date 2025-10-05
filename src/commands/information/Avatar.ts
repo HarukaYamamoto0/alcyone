@@ -39,5 +39,4 @@ class Avatar extends BaseCommand {
   }
 }
 
-// noinspection JSUnusedGlobalSymbols
 export default Avatar;

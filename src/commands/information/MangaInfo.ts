@@ -62,5 +62,4 @@ class MangaInfo extends BaseCommand {
   }
 }
 
-// noinspection JSUnusedGlobalSymbols
 export default MangaInfo;

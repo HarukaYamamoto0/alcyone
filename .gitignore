@@ -5,3 +5,4 @@ node_modules
 .idea/dictionaries/*
 !.idea/dictionaries/project.xml
 .eslintcache
+/src/commands/commands.generated.ts

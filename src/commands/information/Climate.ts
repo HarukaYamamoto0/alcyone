@@ -74,5 +74,4 @@ class Climate extends BaseCommand {
   }
 }
 
-// noinspection JSUnusedGlobalSymbols
 export default Climate;
