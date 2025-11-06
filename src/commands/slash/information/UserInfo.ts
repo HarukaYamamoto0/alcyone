@@ -1,17 +1,19 @@
-import type { ChatInputCommandInteraction } from 'discord.js';
+import type { ChatInputCommandInteraction, SlashCommandUserOption } from 'discord.js';
 import { EmbedBuilder } from 'discord.js';
 import moment from 'moment';
 import 'moment/locale/en-gb';
-import BaseCommand from '../../interfaces/BaseCommand';
-import { Constants } from '../../config/constants';
-import { Emojis, statusMap, userBadgesMap } from '../../config/emojis';
+import { Constants } from '../../../config/constants';
+import Emojis, { statusMap, userBadgesMap } from '../../../config/Emojis';
+import BaseSlashCommand from '../../../interfaces/commands/BaseSlashCommand';
 
-class UserInfo extends BaseCommand {
+class UserInfo extends BaseSlashCommand {
   constructor() {
     super();
     this.setName('userinfo');
-    this.setDescription(`${Emojis.bust_in_silhouette}️ Shows detailed information about a user`);
-    this.addUserOption((option) => option.setName('user').setDescription('The user to get information about'));
+    this.setDescription('Shows detailed information about a user');
+    this.data.addUserOption((option: SlashCommandUserOption) =>
+      option.setName('user').setDescription('The user to get information about'),
+    );
   }
 
   async execute(interaction: ChatInputCommandInteraction): Promise<void> {
@@ -69,4 +71,5 @@ class UserInfo extends BaseCommand {
   }
 }
 
+// noinspection JSUnusedGlobalSymbols
 export default UserInfo;

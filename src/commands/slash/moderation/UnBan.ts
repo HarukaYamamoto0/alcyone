@@ -1,25 +1,25 @@
-import type { ChatInputCommandInteraction } from 'discord.js';
+import type { ChatInputCommandInteraction, SlashCommandStringOption } from 'discord.js';
 import { EmbedBuilder, MessageFlagsBitField, PermissionFlagsBits } from 'discord.js';
-import BaseCommand from '../../interfaces/BaseCommand';
-import { Constants } from '../../config/constants';
-import { Emojis } from '../../config/emojis';
+import { Constants } from '../../../config/constants';
+import Emojis from '../../../config/Emojis';
+import BaseSlashCommand from '../../../interfaces/commands/BaseSlashCommand';
 
-class Unban extends BaseCommand {
+class Unban extends BaseSlashCommand {
   constructor() {
     super();
     this.setName('unban');
-    this.setDescription(`${Emojis.recycle} Unban a user by ID`);
-    this.addStringOption((option) =>
+    this.setDescription('Unban a user by ID');
+    this.data.addStringOption((option: SlashCommandStringOption) =>
       option.setName('user_id').setDescription('The ID of the user to unban').setRequired(true),
     );
-    this.addStringOption((option) =>
+    this.data.addStringOption((option: SlashCommandStringOption) =>
       option
         .setName('reason')
         .setDescription('Reason for the unban (max 1000 chars)')
         .setMaxLength(1000)
         .setRequired(false),
     );
-    this.setDefaultMemberPermissions(PermissionFlagsBits.BanMembers);
+    this.data.setDefaultMemberPermissions(PermissionFlagsBits.BanMembers);
   }
 
   async execute(interaction: ChatInputCommandInteraction): Promise<void> {
@@ -30,7 +30,7 @@ class Unban extends BaseCommand {
 
     if (!guild) {
       await interaction.reply({
-        content: `${Emojis.error}This command must be used in a server.`,
+        content: `${Emojis.x}This command must be used in a server.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
       return;
@@ -39,7 +39,7 @@ class Unban extends BaseCommand {
     const me = guild.members.me;
     if (!me?.permissions.has(PermissionFlagsBits.BanMembers)) {
       await interaction.reply({
-        content: `${Emojis.error}I don’t have permission to unban members.`,
+        content: `${Emojis.x}I don’t have permission to unban members.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
       return;
@@ -51,7 +51,7 @@ class Unban extends BaseCommand {
 
       if (!bannedUser) {
         await interaction.reply({
-          content: `${Emojis.error}No user with that ID is banned.`,
+          content: `${Emojis.x}No user with that ID is banned.`,
           flags: MessageFlagsBitField.Flags.Ephemeral,
         });
         return;
@@ -79,11 +79,12 @@ class Unban extends BaseCommand {
     } catch (err) {
       console.error(err);
       await interaction.reply({
-        content: `❌ An error occurred while trying to unban user with ID \`${userId}\`.`,
+        content: `${Emojis.x} An error occurred while trying to unban user with ID \`${userId}\`.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
     }
   }
 }
 
+// noinspection JSUnusedGlobalSymbols
 export default Unban;

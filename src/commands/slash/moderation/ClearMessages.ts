@@ -1,17 +1,17 @@
-import type { ChatInputCommandInteraction } from 'discord.js';
+import type { ChatInputCommandInteraction, SlashCommandIntegerOption } from 'discord.js';
 import { EmbedBuilder, MessageFlagsBitField, PermissionsBitField } from 'discord.js';
 import moment from 'moment';
 import 'moment/locale/en-gb';
-import BaseCommand from '../../interfaces/BaseCommand';
-import { Constants } from '../../config/constants';
-import { Emojis } from '../../config/emojis';
+import { Constants } from '../../../config/constants';
+import Emojis from '../../../config/Emojis';
+import BaseSlashCommand from '../../../interfaces/commands/BaseSlashCommand';
 
-class ClearMessages extends BaseCommand {
+class ClearMessages extends BaseSlashCommand {
   constructor() {
     super();
     this.setName('clear');
-    this.setDescription(`${Emojis.broom} Deletes a set amount of messages in the current channel.`);
-    this.addIntegerOption((option) =>
+    this.setDescription('Deletes a set amount of messages in the current channel.');
+    this.data.addIntegerOption((option: SlashCommandIntegerOption) =>
       option.setName('amount').setDescription('Number of messages to delete (1-99)').setRequired(true),
     );
   }
@@ -21,7 +21,7 @@ class ClearMessages extends BaseCommand {
 
     if (!interaction.guild || !interaction.channel || !interaction.inGuild()) {
       await interaction.reply({
-        content: `${Emojis.error} This command can only be used inside a server channel.`,
+        content: `${Emojis.x} This command can only be used inside a server channel.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
       return;
@@ -33,7 +33,7 @@ class ClearMessages extends BaseCommand {
     // Permission checks
     if (!member.permissions.has(PermissionsBitField.Flags.ManageMessages)) {
       await interaction.reply({
-        content: `${Emojis.error} You need the **Manage Messages** permission to use this command.`,
+        content: `${Emojis.x} You need the **Manage Messages** permission to use this command.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
       return;
@@ -41,7 +41,7 @@ class ClearMessages extends BaseCommand {
 
     if (!me.permissions.has(PermissionsBitField.Flags.ManageMessages)) {
       await interaction.reply({
-        content: `${Emojis.error} I need the **Manage Messages** permission to perform this action.`,
+        content: `${Emojis.x} I need the **Manage Messages** permission to perform this action.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
       return;
@@ -49,7 +49,7 @@ class ClearMessages extends BaseCommand {
 
     if (amount < 1 || amount > 99) {
       await interaction.reply({
-        content: `${Emojis.error} Please provide a number between **1** and **99**.`,
+        content: `${Emojis.x} Please provide a number between **1** and **99**.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
       return;
@@ -106,7 +106,7 @@ class ClearMessages extends BaseCommand {
       }
     } catch (error) {
       await interaction.reply({
-        content: `${Emojis.error} Messages older than **14 days** cannot be deleted.'`,
+        content: `${Emojis.x} Messages older than **14 days** cannot be deleted.'`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
       console.log(error);
@@ -114,4 +114,5 @@ class ClearMessages extends BaseCommand {
   }
 }
 
+// noinspection JSUnusedGlobalSymbols
 export default ClearMessages;

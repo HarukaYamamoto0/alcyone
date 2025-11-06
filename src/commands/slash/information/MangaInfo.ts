@@ -1,16 +1,16 @@
-import type { ChatInputCommandInteraction } from 'discord.js';
+import type { ChatInputCommandInteraction, SlashCommandStringOption } from 'discord.js';
 import { EmbedBuilder } from 'discord.js';
 import axios from 'axios';
-import BaseCommand from '../../interfaces/BaseCommand';
-import { Constants } from '../../config/constants';
-import { Emojis } from '../../config/emojis';
+import { Constants } from '../../../config/constants';
+import Emojis from '../../../config/Emojis';
+import BaseSlashCommand from '../../../interfaces/commands/BaseSlashCommand';
 
-class MangaInfo extends BaseCommand {
+class MangaInfo extends BaseSlashCommand {
   constructor() {
     super();
     this.setName('mangainfo');
     this.setDescription(`${Emojis.book} Shows detailed information about a manga by name`);
-    this.addStringOption((option) =>
+    this.data.addStringOption((option: SlashCommandStringOption) =>
       option.setName('manga').setDescription('Name of the manga to search').setRequired(true),
     );
   }
@@ -29,7 +29,7 @@ class MangaInfo extends BaseCommand {
       const data = response.data.data;
       if (!data || data.length === 0) {
         await interaction.editReply({
-          content: `${Emojis.error} No manga found with the name **${mangaName}**.`,
+          content: `${Emojis.x} No manga found with the name **${mangaName}**.`,
         });
         return;
       }
@@ -62,10 +62,11 @@ class MangaInfo extends BaseCommand {
     } catch (err) {
       console.error(err);
       await interaction.editReply({
-        content: `${Emojis.error} An error occurred while searching for **${mangaName}**.`,
+        content: `${Emojis.x} An error occurred while searching for **${mangaName}**.`,
       });
     }
   }
 }
 
+// noinspection JSUnusedGlobalSymbols
 export default MangaInfo;

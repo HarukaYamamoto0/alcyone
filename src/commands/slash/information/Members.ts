@@ -1,10 +1,10 @@
 import type { ChatInputCommandInteraction } from 'discord.js';
 import { EmbedBuilder, MessageFlagsBitField } from 'discord.js';
-import BaseCommand from '../../interfaces/BaseCommand';
-import { Constants } from '../../config/constants';
-import { Emojis } from '../../config/emojis';
+import { Constants } from '../../../config/constants';
+import Emojis from '../../../config/Emojis';
+import BaseSlashCommand from '../../../interfaces/commands/BaseSlashCommand';
 
-class Members extends BaseCommand {
+class Members extends BaseSlashCommand {
   constructor() {
     super();
     this.setName('members');
@@ -15,7 +15,7 @@ class Members extends BaseCommand {
     const guild = interaction.guild;
     if (!guild) {
       await interaction.reply({
-        content: `${Emojis.error} This command can only be used on servers.`,
+        content: `${Emojis.x} This command can only be used on servers.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
       return;
@@ -40,4 +40,5 @@ class Members extends BaseCommand {
   }
 }
 
+// noinspection JSUnusedGlobalSymbols
 export default Members;

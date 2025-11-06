@@ -1,58 +1,28 @@
-/**
- * A collection of emojis used for various statuses and symbols.
- * Each property represents a string value corresponding to an emoji symbol in Discord format,
- * for example, the emoji ⭐ is :star:
- */
-export const Emojis = {
-  success: ':white_check_mark:',
-  error: ':x:',
-  loading: ':hourglass:',
-  info: ':bulb:',
-  ghost: ':ghost:',
-  star: ':star:',
-  statics: ':bar_chart:',
-  map: ':map:',
-  package: ':package:',
-  envelope_with_arrow: ':envelope_with_arrow:',
-  speech_balloon: ':speech_balloon:',
-  link: ':link:',
-  ping_pong: ':ping_pong:',
-  robot: ':robot:',
-  globe: ':globe_with_meridians:',
-  satellite: ':satellite:',
-  flash: ':zap:',
-  crossed_flags: ':crossed_flags:',
-  tv: ':tv:',
-  clapper: ':clapper:',
-  frame_photo: ':frame_photo:',
-  white_sun_small_cloud: ':white_sun_small_cloud:',
-  date: ':date:',
-  book: ':book:',
-  books: ':books:',
-  busts_in_silhouette: ':busts_in_silhouette:',
-  crown: ':crown:',
-  desktop: ':desktop:',
-  bust_in_silhouette: ':bust_in_silhouette:',
-  id: ':id:',
-  label: ':label:',
-  performing_arts: ':performing_arts:',
-  inbox_tray: ':inbox_tray:',
-  rocket: ':rocket:',
-  tools: ':tools:',
-  handshake: ':handshake:',
-  tada: ':tada:',
-  lady_beetle: ':lady_beetle:',
-  bug: ':bug:',
-  hammer: ':hammer:',
-  shield: ':shield:',
-  broom: ':broom:',
-  boot: ':boot:',
-  recycle: ':recycle:',
-  bulb: ':bulb:',
-  thumbsup: '👍',
-  thumbsdown: '👎',
-};
+import * as dEmojis from 'discord-emoji';
 
+export const people = dEmojis.people;
+export const symbols = dEmojis.symbols;
+export const nature = dEmojis.nature;
+export const food = dEmojis.food;
+export const activity = dEmojis.activity;
+export const travel = dEmojis.travel;
+export const objects = dEmojis.objects;
+export const flags = dEmojis.flags;
+
+/**
+ * An object that contains emoji representations for various badges and statuses in a system.
+ * It includes predefined emojis for badges, user statuses, and potentially extends from another emoji object.
+ */
+const Emojis = {
+  ...people,
+  ...symbols,
+  ...nature,
+  ...food,
+  ...activity,
+  ...travel,
+  ...objects,
+  ...flags,
+};
 /**
  * The object contains nested categories as keys, with each key mapping to subcategories or specific emoji definitions.
  * Each emoji definition includes a string representing the corresponding emoji identifier.
@@ -161,7 +131,7 @@ export const userBadgesMap: Record<string, string> = {
  * - `offline`: Represents the offline status.
  *
  * Values:
- * The values are custom emojis defined in the `CustomEmojis` object.
+ * The values are custom emojis defined in the `Emojis` object.
  */
 export const statusMap: Record<string, string> = {
   online: CustomEmojis.status.online,
@@ -169,3 +139,5 @@ export const statusMap: Record<string, string> = {
   dnd: CustomEmojis.status.dnd,
   offline: CustomEmojis.status.offline,
 };
+
+export default Emojis;

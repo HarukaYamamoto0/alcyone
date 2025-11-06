@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { BaseEnvSchema } from './base.js';
 import { IntegrationEnvSchema } from './integrations.js';
+import Emojis from '../Emojis';
 
 const EnvSchema = z.object({
   ...BaseEnvSchema.shape,
@@ -23,20 +24,20 @@ export type Env = z.infer<typeof EnvSchema>;
  */
 export const Env: Env = (() => {
   if (process.env.NODE_ENV !== 'production') {
-    console.warn('⚠️ Running in dev mode, skipping strict env validation');
+    console.warn(`${Emojis.warning} Running in dev mode, skipping strict env validation`);
     return EnvSchema.partial().parse(process.env) as Env;
   }
 
   const result = EnvSchema.safeParse(process.env);
 
   if (!result.success) {
-    console.error('❌ Environment validation failed:\n');
+    console.error(`${Emojis.x} Environment validation failed:\n`);
     for (const issue of result.error.issues) {
       console.error(`• ${issue.path.join('.')}: ${issue.message}`);
     }
     process.exit(1);
   }
 
-  console.log('✅ Environment validated successfully');
+  console.log(`${Emojis.check_mark} Environment validated successfully`);
   return result.data;
 })();

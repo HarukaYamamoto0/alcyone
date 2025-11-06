@@ -1,15 +1,13 @@
 import type { ChatInputCommandInteraction } from 'discord.js';
 import { EmbedBuilder } from 'discord.js';
-import BaseCommand from '../../interfaces/BaseCommand';
-import { Emojis } from '../../config/emojis';
-import { Constants } from '../../config/constants';
+import Emojis from '../../../config/Emojis';
+import { Constants } from '../../../config/constants';
+import BaseSlashCommand from '../../../interfaces/commands/BaseSlashCommand';
 
-class Invite extends BaseCommand {
+class Invite extends BaseSlashCommand {
   constructor() {
     super();
-    this.setName('invite').setDescription(
-      `${Emojis.envelope_with_arrow} Get the bot invite link and server support info`,
-    );
+    this.setName('invite').setDescription(`Get the bot invite link and server support info`);
   }
 
   async execute(interaction: ChatInputCommandInteraction): Promise<void> {

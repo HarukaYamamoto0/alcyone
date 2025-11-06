@@ -1,6 +1,6 @@
 import { readdirSync } from 'node:fs';
 import type { BaseBotEvent } from '../interfaces/BaseBotEvent';
-import type { AlcyoneClient } from '../core/Client';
+import type AlcyoneClient from '../core/Client';
 
 /**
  * Loads and registers event files from a specified directory into the Discord client.

@@ -1,13 +1,13 @@
 import type { ChatInputCommandInteraction } from 'discord.js';
 import { EmbedBuilder } from 'discord.js';
-import BaseCommand from '../../interfaces/BaseCommand';
-import { Emojis } from '../../config/emojis';
-import { Constants } from '../../config/constants';
+import Emojis from '../../../config/Emojis';
+import { Constants } from '../../../config/constants';
+import BaseSlashCommand from '../../../interfaces/commands/BaseSlashCommand';
 
-class Ping extends BaseCommand {
+class Ping extends BaseSlashCommand {
   constructor() {
     super();
-    this.setName('ping').setDescription(`${Emojis.ping_pong} Shows bot and server latency with a dash of style`);
+    this.setName('ping').setDescription('Shows bot and server latency with a dash of style');
     // TODO: Add a cooldown to this command and automatic category
     // this.setDMPermission(false);
     // this.setNSFW(false);
@@ -47,15 +47,16 @@ class Ping extends BaseCommand {
         .setTitle(`${Emojis.ping_pong} Pong! Check out the stats below:`)
         .setDescription(
           `**${Emojis.satellite} Client Ping:** \`${clientPing}ms\`\n` +
-            `**${Emojis.globe} Guild Ping:** \`${guildPing}ms\`\n` +
+            `**${Emojis.globe_with_meridians} Guild Ping:** \`${guildPing}ms\`\n` +
             `**${Emojis.robot} Bot Uptime:** ${uptime}`,
         )
         .setColor(Constants.COLORS.primary)
-        .setFooter({ text: `${Emojis.flash} Fast and reliable — just like me!` });
+        .setFooter({ text: `${Emojis.flashlight} Fast and reliable — just like me!` });
 
       await interaction.editReply({ embeds: [pingEmbed] });
     }, 1500); // shorter delay, more responsive
   }
 }
 
+// noinspection JSUnusedGlobalSymbols
 export default Ping;

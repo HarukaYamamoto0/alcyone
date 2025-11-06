@@ -1,18 +1,20 @@
-import type { ChatInputCommandInteraction } from 'discord.js';
+import type { ChatInputCommandInteraction, SlashCommandStringOption } from 'discord.js';
 import { EmbedBuilder } from 'discord.js';
 import axios from 'axios';
-import BaseCommand from '../../interfaces/BaseCommand';
-import { API } from '../../config/api';
-import { Emojis } from '../../config/emojis';
-import { Constants } from '../../config/constants';
+import { API } from '../../../config/api';
+import Emojis from '../../../config/Emojis';
+import { Constants } from '../../../config/constants';
+import BaseSlashCommand from '../../../interfaces/commands/BaseSlashCommand';
 
-class AnimeInfo extends BaseCommand {
+class AnimeInfo extends BaseSlashCommand {
   constructor() {
     super();
     this.setName('animeinfo');
-    this.category = 'Information';
-    this.setDescription(`[${this.category}] Shows detailed information of an anime by name`);
-    this.addStringOption((option) => option.setName('anime').setDescription('Anime name to search').setRequired(true));
+    this.setCategory('Information');
+    this.setDescription(`Shows detailed information of an anime by name`);
+    this.data.addStringOption((option: SlashCommandStringOption) =>
+      option.setName('anime').setDescription('Anime name to search').setRequired(true),
+    );
   }
 
   async execute(interaction: ChatInputCommandInteraction): Promise<void> {
@@ -29,7 +31,7 @@ class AnimeInfo extends BaseCommand {
       const data = response.data.data;
       if (!data || data.length === 0) {
         await interaction.editReply({
-          content: `${Emojis.error} I didn't find any anime with the name **${animeName}**.`,
+          content: `${Emojis.x} I didn't find any anime with the name **${animeName}**.`,
         });
         return;
       }
@@ -61,10 +63,11 @@ class AnimeInfo extends BaseCommand {
     } catch (err) {
       console.error(err);
       await interaction.editReply({
-        content: `${Emojis.error} An error occurred while retrieving information about**${animeName}**.`,
+        content: `${Emojis.x} An error occurred while retrieving information about**${animeName}**.`,
       });
     }
   }
 }
 
+// noinspection JSUnusedGlobalSymbols
 export default AnimeInfo;

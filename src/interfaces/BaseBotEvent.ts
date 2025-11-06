@@ -1,5 +1,5 @@
 import type { ClientEvents } from 'discord.js';
-import type { AlcyoneClient } from '../core/Client';
+import type AlcyoneClient from '../core/Client';
 
 /**
  * Represents the base structure for a bot event. This interface defines the
@@ -8,5 +8,5 @@ import type { AlcyoneClient } from '../core/Client';
 export interface BaseBotEvent<K extends keyof ClientEvents = keyof ClientEvents> {
   eventType: K;
   once: boolean;
-  execute: (alcyoneClient: AlcyoneClient, ...args: ClientEvents[K]) => void | Promise<void>;
+  execute: (client: AlcyoneClient, ...args: ClientEvents[K]) => unknown | Promise<unknown>;
 }

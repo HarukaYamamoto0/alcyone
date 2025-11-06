@@ -1,17 +1,17 @@
-import type { ChatInputCommandInteraction } from 'discord.js';
+import type { ChatInputCommandInteraction, SlashCommandStringOption } from 'discord.js';
 import { ChannelType, EmbedBuilder, MessageFlagsBitField } from 'discord.js';
 import moment from 'moment';
 import 'moment/locale/en-gb';
-import BaseCommand from '../../interfaces/BaseCommand';
-import { Constants } from '../../config/constants';
-import { Emojis } from '../../config/emojis';
+import { Constants } from '../../../config/constants';
+import Emojis from '../../../config/Emojis';
+import BaseSlashCommand from '../../../interfaces/commands/BaseSlashCommand';
 
-class ServerInfo extends BaseCommand {
+class ServerInfo extends BaseSlashCommand {
   constructor() {
     super();
     this.setName('serverinfo');
-    this.setDescription(`${Emojis.statics} Shows detailed information about this server`);
-    this.addStringOption((option) =>
+    this.setDescription('Shows detailed information about this server');
+    this.data.addStringOption((option: SlashCommandStringOption) =>
       option.setName('id').setDescription('Optional server ID to fetch').setRequired(false),
     );
   }
@@ -26,7 +26,7 @@ class ServerInfo extends BaseCommand {
 
     if (!guild) {
       await interaction.reply({
-        content: `${Emojis.error} Could not find the specified server or you are not in it.`,
+        content: `${Emojis.x} Could not find the specified server or you are not in it.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
       return;
@@ -76,4 +76,5 @@ class ServerInfo extends BaseCommand {
   }
 }
 
+// noinspection JSUnusedGlobalSymbols
 export default ServerInfo;

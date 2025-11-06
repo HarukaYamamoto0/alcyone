@@ -1,49 +1,44 @@
 import type { Interaction } from 'discord.js';
 import { Events, MessageFlags } from 'discord.js';
 import type { BaseBotEvent } from '../interfaces/BaseBotEvent';
-import commands from '../commands/commands.generated';
-
-const commandMap = new Map(commands.map((cmd) => [cmd.name, cmd]));
+import type AlcyoneClient from '../core/Client';
+import safeReply from '../utils/safeReply';
 
 class InteractionCreateEvent implements BaseBotEvent<'interactionCreate'> {
   public eventType = Events.InteractionCreate as const;
   public once = false;
 
-  async execute(_: unknown, interaction: Interaction): Promise<void> {
-    if (!interaction.isChatInputCommand()) return;
-
-    const command = commandMap.get(interaction.commandName);
-
-    if (!command) {
-      console.warn(`[InteractionCreateEvent] - Command "${interaction.commandName}" not found.`);
-      return;
-    }
-
+  async execute(client: AlcyoneClient, interaction: Interaction) {
     try {
-      await command.execute(interaction);
-    } catch (error) {
-      console.error(`[CommandError] ${interaction.commandName}`, error);
+      if (interaction.isChatInputCommand()) {
+        const record = client.commands.slash.get(interaction.commandName);
+        if (!record) return this.warnMissing(interaction.commandName);
+        return await record.instance.execute(interaction);
+      }
 
-      const errorPayload = {
+      if (interaction.isUserContextMenuCommand()) {
+        const record = client.commands.user.get(interaction.commandName);
+        if (!record) return this.warnMissing(interaction.commandName);
+        return await record.instance.execute(interaction);
+      }
+
+      if (interaction.isMessageContextMenuCommand()) {
+        const record = client.commands.message.get(interaction.commandName);
+        if (!record) return this.warnMissing(interaction.commandName);
+        return await record.instance.execute(interaction);
+      }
+    } catch (error) {
+      console.error(`[CommandError]`, error);
+      return safeReply(interaction, {
         content: '⚠️ There was an unexpected error while executing this command.',
         flags: MessageFlags.Ephemeral,
-      } as const;
-
-      try {
-        if (interaction.replied || interaction.deferred) {
-          await interaction.followUp(errorPayload);
-        } else {
-          await interaction.reply(errorPayload);
-        }
-      } catch (sendError) {
-        console.error(
-          `[InteractionCreateEvent] - Failed to send error response for ${interaction.commandName}`,
-          sendError,
-        );
-      }
+      });
     }
+  }
+
+  private warnMissing(commandName: string) {
+    console.warn(`[InteractionCreateEvent] - Command "${commandName}" not found.`);
   }
 }
 
-// noinspection JSUnusedGlobalSymbols
 export default InteractionCreateEvent;

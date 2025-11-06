@@ -1,18 +1,18 @@
-import type { ChatInputCommandInteraction } from 'discord.js';
+import type { ChatInputCommandInteraction, SlashCommandStringOption } from 'discord.js';
 import { EmbedBuilder, MessageFlagsBitField } from 'discord.js';
-import BaseCommand from '../../interfaces/BaseCommand';
-import type { WeatherAPIResponse } from '../../interfaces/WeatherAPIResponse';
+import type { WeatherAPIResponse } from '../../../interfaces/WeatherAPIResponse';
 import axios from 'axios';
-import { API } from '../../config/api';
-import { Emojis } from '../../config/emojis';
-import { Constants } from '../../config/constants';
+import { API } from '../../../config/api';
+import Emojis from '../../../config/Emojis';
+import { Constants } from '../../../config/constants';
+import BaseSlashCommand from '../../../interfaces/commands/BaseSlashCommand';
 
-class Climate extends BaseCommand {
+class Climate extends BaseSlashCommand {
   constructor() {
     super();
     this.setName('climate');
     this.setDescription(`${Emojis.white_sun_small_cloud} Shows the current climate and 3-day forecast of a location`);
-    this.addStringOption((option) =>
+    this.data.addStringOption((option: SlashCommandStringOption) =>
       option.setName('local').setDescription('City or location to search for the weather').setRequired(true),
     );
   }
@@ -69,11 +69,12 @@ class Climate extends BaseCommand {
     } catch (err) {
       console.error(err);
       await interaction.reply({
-        content: `${Emojis.error} This city could not be found or an API error occurred.`,
+        content: `${Emojis.x} This city could not be found or an API error occurred.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
     }
   }
 }
 
+// noinspection JSUnusedGlobalSymbols
 export default Climate;

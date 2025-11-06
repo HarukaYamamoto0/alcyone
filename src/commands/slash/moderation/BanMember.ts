@@ -1,16 +1,18 @@
-import type { ChatInputCommandInteraction } from 'discord.js';
+import type { ChatInputCommandInteraction, SlashCommandStringOption, SlashCommandUserOption } from 'discord.js';
 import { EmbedBuilder, MessageFlagsBitField, PermissionFlagsBits } from 'discord.js';
-import BaseCommand from '../../interfaces/BaseCommand';
-import { Constants } from '../../config/constants';
-import { Emojis } from '../../config/emojis';
+import { Constants } from '../../../config/constants';
+import Emojis from '../../../config/Emojis';
+import BaseSlashCommand from '../../../interfaces/commands/BaseSlashCommand';
 
-class Ban extends BaseCommand {
+class Ban extends BaseSlashCommand {
   constructor() {
     super();
     this.setName('ban');
-    this.setDescription(`${Emojis.hammer} Ban a user from the server`);
-    this.addUserOption((option) => option.setName('user').setDescription('The user to ban').setRequired(true));
-    this.addStringOption((option) =>
+    this.setDescription('Ban a user from the server');
+    this.data.addUserOption((option: SlashCommandUserOption) =>
+      option.setName('user').setDescription('The user to ban').setRequired(true),
+    );
+    this.data.addStringOption((option: SlashCommandStringOption) =>
       option
         .setName('reason')
         .setDescription('Reason for banning the user (max 1000 chars)')
@@ -18,7 +20,7 @@ class Ban extends BaseCommand {
         .setRequired(false),
     );
     // Set default permission so only members with BanMembers can run it
-    this.setDefaultMemberPermissions(PermissionFlagsBits.BanMembers);
+    this.data.setDefaultMemberPermissions(PermissionFlagsBits.BanMembers);
   }
 
   async execute(interaction: ChatInputCommandInteraction): Promise<void> {
@@ -29,7 +31,7 @@ class Ban extends BaseCommand {
 
     if (!guild) {
       await interaction.reply({
-        content: `${Emojis.error} This command must be used in a server.`,
+        content: `${Emojis.x} This command must be used in a server.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
       return;
@@ -39,7 +41,7 @@ class Ban extends BaseCommand {
     const me = guild.members.me;
     if (!me?.permissions.has(PermissionFlagsBits.BanMembers)) {
       await interaction.reply({
-        content: `${Emojis.error} I don’t have permission to ban members.`,
+        content: `${Emojis.x} I don’t have permission to ban members.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
       return;
@@ -49,7 +51,7 @@ class Ban extends BaseCommand {
     const bans = await guild.bans.fetch();
     if (bans.has(targetUser.id)) {
       await interaction.reply({
-        content: `${Emojis.error} That user is already banned.`,
+        content: `${Emojis.x} That user is already banned.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
       return;
@@ -58,7 +60,7 @@ class Ban extends BaseCommand {
     // Prevent banning self or bot
     if (targetUser.id === author.id) {
       await interaction.reply({
-        content: `${Emojis.error} You can’t ban yourself.`,
+        content: `${Emojis.x} You can’t ban yourself.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
       return;
@@ -66,7 +68,7 @@ class Ban extends BaseCommand {
 
     if (targetUser.id === me.id) {
       await interaction.reply({
-        content: `${Emojis.error} You can’t ban me.`,
+        content: `${Emojis.x} You can’t ban me.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
       return;
@@ -94,11 +96,12 @@ class Ban extends BaseCommand {
     } catch (err) {
       console.error(err);
       await interaction.reply({
-        content: `${Emojis.error} An error occurred while trying to ban **${targetUser.tag}**.`,
+        content: `${Emojis.x} An error occurred while trying to ban **${targetUser.tag}**.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
     }
   }
 }
 
+// noinspection JSUnusedGlobalSymbols
 export default Ban;

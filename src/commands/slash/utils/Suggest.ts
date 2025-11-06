@@ -1,15 +1,15 @@
-import type { ChatInputCommandInteraction, EmojiIdentifierResolvable } from 'discord.js';
+import type { ChatInputCommandInteraction, EmojiIdentifierResolvable, SlashCommandStringOption } from 'discord.js';
 import { EmbedBuilder, MessageFlagsBitField } from 'discord.js';
-import BaseCommand from '../../interfaces/BaseCommand';
-import { Constants } from '../../config/constants';
-import { Emojis } from '../../config/emojis';
+import { Constants } from '../../../config/constants';
+import Emojis from '../../../config/Emojis';
+import BaseSlashCommand from '../../../interfaces/commands/BaseSlashCommand';
 
-class Suggest extends BaseCommand {
+class Suggest extends BaseSlashCommand {
   constructor() {
     super();
     this.setName('suggest');
-    this.setDescription(`${Emojis.bulb} Submit a suggestion to the server`);
-    this.addStringOption((option) =>
+    this.setDescription(`Submit a suggestion to the server`);
+    this.data.addStringOption((option: SlashCommandStringOption) =>
       option
         .setName('message')
         .setDescription('The suggestion content (max 1000 characters)')
@@ -24,7 +24,7 @@ class Suggest extends BaseCommand {
 
     if (!serverId || !suggestChannelId) {
       await interaction.reply({
-        content: `${Emojis.error} | No suggestion channel has been configured in the environment.`,
+        content: `${Emojis.x} | No suggestion channel has been configured in the environment.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
       return;
@@ -34,7 +34,7 @@ class Suggest extends BaseCommand {
 
     if (!guild) {
       await interaction.reply({
-        content: `${Emojis.error} | I couldn't find the server. Please check the server ID in the environment variables.`,
+        content: `${Emojis.x} | I couldn't find the server. Please check the server ID in the environment variables.`,
       });
       return;
     }
@@ -43,7 +43,7 @@ class Suggest extends BaseCommand {
 
     if (!channel || !channel.isTextBased()) {
       await interaction.reply({
-        content: `${Emojis.error} | The configured suggestion channel does not exist or is not a text channel.`,
+        content: `${Emojis.x} | The configured suggestion channel does not exist or is not a text channel.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
       return;
@@ -56,8 +56,8 @@ class Suggest extends BaseCommand {
       .setColor(Constants.COLORS.primary)
       .setThumbnail(interaction.user.displayAvatarURL())
       .addFields(
-        { name: '👤 Author', value: `${interaction.user}`, inline: true },
-        { name: '📝 Suggestion', value: content },
+        { name: `${Emojis.person} Author`, value: `${interaction.user}`, inline: true },
+        { name: `${Emojis.pencil} Suggestion`, value: content },
       )
       .setFooter({ text: `Author ID: ${interaction.user.id}` })
       .setTimestamp();
@@ -73,10 +73,11 @@ class Suggest extends BaseCommand {
     }
 
     await interaction.reply({
-      content: `${Emojis.success} | ${interaction.user}, your suggestion has been successfully submitted!`,
+      content: `${Emojis.check_mark} | ${interaction.user}, your suggestion has been successfully submitted!`,
       flags: MessageFlagsBitField.Flags.Ephemeral,
     });
   }
 }
 
+// noinspection JSUnusedGlobalSymbols
 export default Suggest;

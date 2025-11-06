@@ -1,15 +1,15 @@
-import type { ChatInputCommandInteraction } from 'discord.js';
+import type { ChatInputCommandInteraction, SlashCommandUserOption } from 'discord.js';
 import { EmbedBuilder, MessageFlagsBitField } from 'discord.js';
-import BaseCommand from '../../interfaces/BaseCommand';
-import { Emojis } from '../../config/emojis';
-import { Constants } from '../../config/constants';
+import Emojis from '../../../config/Emojis';
+import { Constants } from '../../../config/constants';
+import BaseSlashCommand from '../../../interfaces/commands/BaseSlashCommand';
 
-class Avatar extends BaseCommand {
+class Avatar extends BaseSlashCommand {
   constructor() {
     super();
     this.setName('avatar');
-    this.setDescription(`${Emojis.frame_photo}️ Shows the avatar`);
-    this.addUserOption((option) =>
+    this.setDescription(`Shows the avatar`);
+    this.data.addUserOption((option: SlashCommandUserOption) =>
       option.setName('user').setDescription('Choose a user to see the avatar').setRequired(false),
     );
   }
@@ -23,7 +23,7 @@ class Avatar extends BaseCommand {
       user = await client.users.fetch(userId);
     } catch {
       await interaction.reply({
-        content: `${Emojis.error}️ I couldn't find this user.`,
+        content: `${Emojis.x}️ I couldn't find this user.`,
         flags: MessageFlagsBitField.Flags.Ephemeral,
       });
       return;
@@ -41,4 +41,5 @@ class Avatar extends BaseCommand {
   }
 }
 
+// noinspection JSUnusedGlobalSymbols
 export default Avatar;
