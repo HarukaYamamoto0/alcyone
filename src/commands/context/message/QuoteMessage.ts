@@ -3,7 +3,7 @@ import type { MessageContextMenuCommandInteraction } from 'discord.js';
 import { EmbedBuilder, hyperlink, MessageFlagsBitField } from 'discord.js';
 import { Constants } from '../../../config/constants';
 
-class QuoteMessageContextCommand extends BaseMessageContextCommand {
+class QuoteMessage extends BaseMessageContextCommand {
   constructor() {
     super();
     this.setName('Quote Message');
@@ -49,4 +49,4 @@ class QuoteMessageContextCommand extends BaseMessageContextCommand {
 }
 
 // noinspection JSUnusedGlobalSymbols
-export default QuoteMessageContextCommand;
+export default QuoteMessage;

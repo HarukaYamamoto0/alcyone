@@ -3,7 +3,7 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, MessageFlag
 import { Constants } from '../../../config/constants';
 import BaseUserContextCommand from '../../../interfaces/commands/BaseUserContextCommand';
 
-class GetAvatarContextCommand extends BaseUserContextCommand {
+class GetAvatar extends BaseUserContextCommand {
   constructor() {
     super();
     this.setName('Avatar');
@@ -42,4 +42,4 @@ class GetAvatarContextCommand extends BaseUserContextCommand {
 }
 
 // noinspection JSUnusedGlobalSymbols
-export default GetAvatarContextCommand;
+export default GetAvatar;
